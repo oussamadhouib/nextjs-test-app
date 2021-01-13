@@ -1,209 +1,169 @@
-import Head from 'next/head'
+import Head from "next/head";
+import Link from "next/link";
+import { Wrapper } from "../css/styles";
+import axios from "axios";
+import { useState } from "react";
+// import { useHistory } from "react-router-dom";
 
 export default function Home() {
+  // const history = useHistory();
+  const [credentials, setCredentials] = useState({email: "", password: ""});
+
+  var data = JSON.stringify({
+    email: credentials.email,
+    password: credentials.password,
+  });
+
+  var config = {
+    method: "post",
+    url: "http://localhost:5000/auth/login",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  const Login = () => {
+    axios(config)
+      .then(function (response) {
+        if(response.data.token)
+        {
+          window.location.href = "/dashboard";
+        } 
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  const setUserCredentials = (e, name) =>{
+    setCredentials({...credentials, [name]: e.target.value })
+  }
+
   return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Wrapper>
+      <div className="container">
+        <Head>
+          <title>Login Form Using HTML And CSS Only</title>
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap"
+            rel="stylesheet"
+          ></link>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          ></link>
+        </Head>
 
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <main>
+          <div className="container" id="container">
+            <div className="form-container log-in-container">
+              <form action="#">
+                <h1>Login</h1>
+                <div className="social-container">
+                  <a href="#" className="social">
+                    <i className="fa fa-facebook fa-2x"></i>
+                  </a>
+                  <a href="#" className="social">
+                    <i className="fab fa fa-twitter fa-2x"></i>
+                  </a>
+                </div>
+                <span>or use your account</span>
+                <input type="email" placeholder="Email" onChange={(e) => setUserCredentials(e, "email")} />
+                <input type="password" placeholder="Password" onChange={(e) => setUserCredentials(e, "password")} />
+                <Link href="/">
+                  <a>Create account</a>
+                </Link>
+                <button onClick={Login}>Log In</button>
+              </form>
+            </div>
+            <div className="overlay-container">
+              <div className="overlay">
+                <div className="overlay-panel overlay-right">
+                  <h1>HTML CSS Login Form</h1>
+                  <p>
+                    This login form is created using pure HTML and CSS. For
+                    social icons, FontAwesome is used.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
+        <style jsx global>{`
+          * {
+            box-sizing: border-box;
           }
-        }
-      `}</style>
 
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
+          body {
+            background: #fffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: "Montserrat", sans-serif;
+            height: 100vh;
+            margin: -20px 0 50px;
+          }
 
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+          h1 {
+            font-weight: bold;
+            margin: 0;
+          }
+
+          p {
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+          }
+
+          span {
+            font-size: 12px;
+          }
+
+          a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+          }
+
+          button {
+            border-radius: 20px;
+            border: 1px solid #ff4b2b;
+            background-color: #ff4b2b;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+          }
+
+          form {
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+          }
+
+          input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+          }
+        `}</style>
+      </div>
+    </Wrapper>
+  );
 }
